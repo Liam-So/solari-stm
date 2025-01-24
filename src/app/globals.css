@@ -2,3 +2,109 @@
 @tailwind components;
 @tailwind utilities;
 
+.solari-cell {
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: all 0.4s ease-in-out;
+}
+
+.solari-cell:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.solari-cell.updating {
+  animation: flip 0.6s ease-in-out;
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+/* Add some ambient light effect */
+.solari-cell:hover:before {
+  opacity: 1;
+}
+
+.solari-char {
+  display: inline-block;
+  min-width: 0.6em;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.updating .solari-char {
+  animation: charFlip 0.6s ease-in-out;
+}
+
+@keyframes charFlip {
+  0% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: rotateX(-90deg);
+    opacity: 0.3;
+  }
+  60% {
+    transform: rotateX(90deg);
+    opacity: 0.3;
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* Enhanced ambient light effect */
+.solari-char::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.solari-char:hover::before {
+  opacity: 1;
+}
+
+/* Add subtle shadow for depth */
+.solari-char {
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
