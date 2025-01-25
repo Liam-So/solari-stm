@@ -44,10 +44,30 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black p-8 text-white">
-      <div className="mx-auto">
+      {/* <div className="mx-auto">
         <h1 className="text-4xl font-bold text-white mb-8 text-center">TRAIN DEPARTURES</h1>
         <SolariBoard departures={departures} />
-      </div>
+      </div> */}
+
+      {/* <div className="max-w-screen-xl mx-auto bg-gray-800">
+        <div className="grid grid-cols-1 md:grid-cols-4">
+          <div>TIME</div>
+          <div>DESTINATION</div>
+          <div>PLATFORM</div>
+          <div>STATUS</div>
+        </div>
+      </div> */}
+
+      {/* <div className="mb-6 grid grid-cols-4 gap-8 text-white font-mono">
+        <div className="flex pl-2">TIME</div>
+        <div className="flex pl-2">DESTINATION</div>
+        <div className="flex pl-2">PLATFORM</div>
+        <div className="flex pl-2">STATUS</div>
+      </div> */}
+
+      <SolariBoard departures={departures} />
+
+
     </div>
   );
 }
