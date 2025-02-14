@@ -8,7 +8,7 @@
   }
 
   .animate-flip {
-    animation: flip 0.1s infinite;
+    animation: flip 0.3s infinite;
   }
 
   @keyframes flip {
