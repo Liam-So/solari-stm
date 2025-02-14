@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-const CHARACTERS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:'.split('');
+const CHARACTERS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-'.split('');
 
 const getTrainColor = (line) => {
   const colors = {
@@ -55,27 +55,25 @@ const FlipChar = ({ target, onAnimationComplete }) => {
           if (nextChar === target) {
             clearInterval(interval);
             setIsFlipping(false);
-            onAnimationComplete();
+            setTimeout(() => onAnimationComplete(), 0);
             return 0;
           }
           return nextIndex;
         });
-      }, 50);
+      }, 30);
       return () => clearInterval(interval);
     }
   }, [target, onAnimationComplete]);
 
   return (
-    <div className="relative min-w-[32px] w-8 h-12 bg-black overflow-hidden border border-gray-700 rounded-sm">
+    <div className={`relative min-w-[32px] w-8 h-12 bg-black overflow-hidden border border-gray-700 rounded-sm
+      ${isFlipping ? 'animate-flip' : ''}`}
+      style={{
+        transformStyle: 'preserve-3d',
+        perspective: '1000px'
+      }}>
       <div className="absolute w-full h-[1px] bg-gray-700 top-1/2 transform -translate-y-1/2" />
-      <div
-        className={`absolute w-full h-full flex items-center justify-center text-xl font-mono text-yellow-300
-          ${isFlipping ? 'animate-flip' : ''}`}
-        style={{
-          transformStyle: 'preserve-3d',
-          perspective: '1000px'
-        }}
-      >
+      <div className="absolute w-full h-full flex items-center justify-center text-xl font-mono text-yellow-300">
         {current}
       </div>
     </div>
@@ -181,13 +179,21 @@ const styles = `
 @keyframes flip {
   0% {
     transform: rotateX(0deg);
+    background-color: #000;
+  }
+  50% {
+    transform: rotateX(90deg);
+    background-color: #111;
   }
   100% {
-    transform: rotateX(360deg);
+    transform: rotateX(180deg);
+    background-color: #000;
   }
 }
 
 .animate-flip {
-  animation: flip 0.1s linear;
+  animation: flip 0.05s linear;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 `;
