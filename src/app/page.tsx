@@ -60,20 +60,20 @@ const FlipChar = ({ target, onAnimationComplete }) => {
           }
           return nextIndex;
         });
-      }, 30);
+      }, 30); // adjust this to play with duration of flipping
       return () => clearInterval(interval);
     }
   }, [target, onAnimationComplete]);
 
   return (
-    <div className={`relative min-w-[32px] w-8 h-12 bg-black overflow-hidden border border-gray-700 rounded-sm
+    <div className={`relative min-w-[32px] w-8 h-10 bg-gray-900 overflow-hidden border border-gray-700 rounded-sm
       ${isFlipping ? 'animate-flip' : ''}`}
       style={{
         transformStyle: 'preserve-3d',
         perspective: '1000px'
       }}>
       <div className="absolute w-full h-[1px] bg-gray-700 top-1/2 transform -translate-y-1/2" />
-      <div className="absolute w-full h-full flex items-center justify-center text-xl font-mono text-yellow-300">
+      <div className="absolute w-full h-full flex items-center justify-center text-2xl font-mono text-yellow-300 font-semibold">
         {current}
       </div>
     </div>
@@ -132,6 +132,8 @@ const SolariBoard = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      console.log('running interval');
+      
       setBoardData(prev => {
         const newData = [...prev];
         newData[0] = { line: '4', destination: 'CROWN HTS UTICA', time: '1 MIN' };
@@ -139,7 +141,7 @@ const SolariBoard = () => {
         newData[2] = { line: 'N', destination: 'DELAY - SIGNAL', time: '---' };
         return newData;
       });
-    }, 8000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -150,7 +152,7 @@ const SolariBoard = () => {
         <div className="mb-4 text-white text-2xl font-bold text-center">
           UNION SQUARE STATION
         </div>
-        <div className="text-yellow-300 text-lg mb-4 text-center font-mono">
+        <div className="text-white text-lg mb-4 text-center font-mono">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}
         </div>
         <div className="text-gray-400 text-sm mb-2 flex px-2">
