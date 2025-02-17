@@ -67,13 +67,13 @@ const FlipChar = ({ target, onAnimationComplete }) => {
 
   return (
     <div className={`relative min-w-[32px] w-8 h-10 bg-gray-900 overflow-hidden border border-gray-700 rounded-sm
-      ${isFlipping ? 'animate-flip' : ''}`}
+      ${isFlipping ? '' : ''}`} // remove animate-flip if you want to remove
       style={{
         transformStyle: 'preserve-3d',
         perspective: '1000px'
       }}>
       <div className="absolute w-full h-[1px] bg-gray-700 top-1/2 transform -translate-y-1/2" />
-      <div className="absolute w-full h-full flex items-center justify-center text-2xl font-mono text-yellow-300 font-semibold">
+      <div className="absolute w-full h-full flex items-center justify-center text-2xl font-mono text-yellow-300">
         {current}
       </div>
     </div>
@@ -139,6 +139,7 @@ const SolariBoard = () => {
         newData[0] = { line: '4', destination: 'CROWN HTS UTICA', time: '1 MIN' };
         newData[1] = { line: '6', destination: 'PELHAM BAY PARK', time: '3 MIN' };
         newData[2] = { line: 'N', destination: 'DELAY - SIGNAL', time: '---' };
+        newData[3] = { line: 'A', destination: '168 ST', time: '8 MIN' }
         return newData;
       });
     }, 3000);
