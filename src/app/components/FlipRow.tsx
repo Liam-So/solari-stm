@@ -28,7 +28,7 @@ const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowCo
         <TrainBadge line={trainLine} />
       </div>
       <div className="flex gap-1 flex-1 overflow-x-auto no-scrollbar">
-        {destination.padEnd(17, ' ').split('').map((char, index) => (
+        {destination.padEnd(23, ' ').split('').map((char, index) => (
           <FlipChar
             key={index}
             target={char}
@@ -36,15 +36,29 @@ const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowCo
           />
         ))}
       </div>
-      <div className="flex gap-1 shrink-0 w-[280px]">
-        {time.padStart(8, ' ').split('').map((char, index) => (
-          <FlipChar
-            key={`time-${index}`}
-            target={char}
-            onAnimationComplete={() => {}}
-          />
-        ))}
+
+      <div className="flex gap-1 shrink-0">
+        {/* should we add a padStart for more space? */}
+        <div className="flex gap-1">
+          {time.slice(0, 2).split('').map((char, index) => (
+            <FlipChar
+              key={`time-mobile-${index}`}
+              target={char}
+              onAnimationComplete={() => {}}
+            />
+          ))}
+        </div>
+        <div className="hidden sm:flex gap-1">
+          {time.slice(2).split('').map((char, index) => (
+            <FlipChar
+              key={`time-desktop-${index}`}
+              target={char}
+              onAnimationComplete={() => {}}
+            />
+          ))}
+        </div>
       </div>
+
     </div>
   );
 };
