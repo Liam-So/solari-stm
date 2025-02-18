@@ -21,7 +21,6 @@ export async function fetchMTAData(): Promise<Train[]> {
     console.log(feed);
 
     const trains: Train[] = [];
-    const now = Math.floor(Date.now() / 1000); // Convert to seconds
 
     feed.entity.forEach((entity) => {
       if (entity.tripUpdate && entity.tripUpdate.trip) {
@@ -40,9 +39,10 @@ export async function fetchMTAData(): Promise<Train[]> {
 
 
         if (gcStop && gcStop.arrival && gcStop.arrival.time) {
-          const arrivalTime = gcStop.arrival.time; // Directly use timestamp
+          const arrivalTime = Number(gcStop.arrival?.time) || 0; // Ensure it's a number
+          const now = Date.now() / 1000; // Assuming arrivalTime is in Unix timestamp (seconds)
           const minutesAway = Math.round((arrivalTime - now) / 60);
-
+          
           // the final destination is the last element in the stop time update object
           const finalDestination = stopTimeUpdates.at(-1)?.stopId || "";
 

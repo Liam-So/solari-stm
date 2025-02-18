@@ -10,7 +10,7 @@ type FlipRowProps = {
 }
 
 const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowComplete }) => {
-  const [_, setCompletedChars] = useState(0);
+  const [, setCompletedChars] = useState(0);
 
   const handleCharComplete = () => {
     setCompletedChars(prev => {
