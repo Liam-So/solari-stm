@@ -18,6 +18,7 @@ const getTrainColor = (line: string): string => {
     '5': 'bg-green-600',
     '6': 'bg-green-600',
     '7': 'bg-purple-600',
+    '7X': 'bg-purple-600', // should this be a diamond?
     'L': 'bg-gray-600',
     'G': 'bg-green-500',
     'J': 'bg-brown-600',

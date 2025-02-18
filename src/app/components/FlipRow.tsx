@@ -27,7 +27,7 @@ const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowCo
       <div className="shrink-0 w-8">
         <TrainBadge line={trainLine} />
       </div>
-      <div className="flex gap-1 flex-1 overflow-x-auto">
+      <div className="flex gap-1 flex-1 overflow-x-auto no-scrollbar">
         {destination.padEnd(17, ' ').split('').map((char, index) => (
           <FlipChar
             key={index}

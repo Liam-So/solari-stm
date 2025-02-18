@@ -13,33 +13,14 @@ TODO:
 4. Get the last stop in tripUpdate.stopTimeUpdate. This will be our destination.
 
 */
+type Train = {
+  line: string;
+  destination: string;
+  time: string;
+}
 
 const SolariBoard = () => {
-  const [boardData, setBoardData] = useState([
-    { line: '4', destination: 'CROWN HTS UTICA', time: '2 MIN' },
-    { line: '6', destination: 'PELHAM BAY PARK', time: '4 MIN' },
-    { line: 'N', destination: 'ASTORIA DITMARS', time: '6 MIN' },
-    { line: 'F', destination: 'CONEY ISLAND', time: '10 MIN' },
-    { line: '2', destination: 'WAKEFIELD 241 ST', time: '12 MIN' },
-    { line: 'A', destination: 'FAR ROCKAWAY', time: '15 MIN' }
-  ]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     console.log('running interval');
-      
-  //     setBoardData(prev => {
-  //       const newData = [...prev];
-  //       newData[0] = { line: '4', destination: 'CROWN HTS UTICA', time: '1 MIN' };
-  //       newData[1] = { line: '6', destination: 'PELHAM BAY PARK', time: '3 MIN' };
-  //       newData[2] = { line: 'N', destination: 'DELAY - SIGNAL', time: '---' };
-  //       newData[3] = { line: 'A', destination: '168 ST', time: '8 MIN' }
-  //       return newData;
-  //     });
-  //   }, 3000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
+  const [boardData, setBoardData] = useState<Train[]>([]);
 
   useEffect(() => {
     const updateBoard = async () => {

@@ -1,11 +1,6 @@
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 import { STOPS } from '../constants/stops';
-
-const GRAND_CENTRAL_STOPS = new Set([
-  '631', '631N', '631S', // 4, 5, 6 lines
-  '723', '723N', '723S', // 7 line
-  '901', '901N', '901S'  // Shuttle (S)
-]);
+import { GRAND_CENTRAL_STOPS } from '../constants/grandCentral';
 
 type Train = {
   line: string;
@@ -31,8 +26,9 @@ export async function fetchMTAData(): Promise<Train[]> {
     feed.entity.forEach((entity) => {
       if (entity.tripUpdate && entity.tripUpdate.trip) {
         const line = entity.tripUpdate.trip.routeId || "";
+        
         // Only process 4, 5, 6, 7, S trains
-        if (!['4', '5', '6', '7', 'S'].includes(line)) return;
+        if (!['4', '5', '6', '7', '7X', 'S', 'GS'].includes(line)) return;
 
         const stopTimeUpdates = entity.tripUpdate.stopTimeUpdate;
         if (!stopTimeUpdates || stopTimeUpdates.length === 0) return;
