@@ -4,7 +4,15 @@ import React, { useState, useEffect } from 'react';
 import FlipRow from './components/FlipRow';
 import { fetchMTAData } from './services/mtaServices';
 
+/*
+TODO:
+1. Import the static GTFS data into a folder
+2. Create a script that will get the stop ids for grand central station in stops.txt
+3. Create a lookup table for the stops.txt. Make the key the ID and the value the destination name.
+    - Should we store it in a file somewhere?
+4. Get the last stop in tripUpdate.stopTimeUpdate. This will be our destination.
 
+*/
 
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState([
@@ -38,22 +46,22 @@ const SolariBoard = () => {
       const trains = await fetchMTAData();
       console.log(trains);
       
-      // setBoardData(trains);
+      setBoardData(trains);
     };
 
     // Initial fetch
     updateBoard();
 
     // Update every 30 seconds
-    // const interval = setInterval(updateBoard, 30000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(updateBoard, 20000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="mx-auto bg-black">
       <div className="p-6 rounded-lg shadow-xl w-full max-w-5xl h-screen mx-auto">
         <div className="mb-4 text-white text-2xl font-bold text-center">
-          UNION SQUARE STATION
+          GRAND CENTRAL STATION
         </div>
         <div className="text-white text-lg mb-4 text-center font-mono">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}

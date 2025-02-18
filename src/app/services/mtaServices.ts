@@ -1,4 +1,5 @@
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
+import { STOPS } from '../constants/stops';
 
 const GRAND_CENTRAL_STOPS = new Set([
   '631', '631N', '631S', // 4, 5, 6 lines
@@ -41,14 +42,18 @@ export async function fetchMTAData(): Promise<Train[]> {
           update.stopId && GRAND_CENTRAL_STOPS.has(update.stopId)
         );
 
+
         if (gcStop && gcStop.arrival && gcStop.arrival.time) {
           const arrivalTime = gcStop.arrival.time; // Directly use timestamp
           const minutesAway = Math.round((arrivalTime - now) / 60);
 
+          // the final destination is the last element in the stop time update object
+          const finalDestination = stopTimeUpdates.at(-1)?.stopId || "";
+
           if (minutesAway > 0) {
             trains.push({
               line,
-              destination: 'GRAND CENTRAL',
+              destination: STOPS[finalDestination].toUpperCase(),
               time: `${minutesAway} MIN`
             });
           }
