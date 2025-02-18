@@ -1,6 +1,6 @@
 import FlipChar from "./FlipChar";
 import TrainBadge from "./TrainBadge";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type FlipRowProps = {
   destination: string;
@@ -10,7 +10,7 @@ type FlipRowProps = {
 }
 
 const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowComplete }) => {
-  const [completedChars, setCompletedChars] = useState(0);
+  const [, setCompletedChars] = useState(0);
 
   const handleCharComplete = () => {
     setCompletedChars(prev => {

@@ -69,25 +69,25 @@ const SolariBoard = () => {
 export default SolariBoard;
 
 // Add this to your global CSS or style tag
-const styles = `
-@keyframes flip {
-  0% {
-    transform: rotateX(0deg);
-    background-color: #000;
-  }
-  50% {
-    transform: rotateX(90deg);
-    background-color: #111;
-  }
-  100% {
-    transform: rotateX(180deg);
-    background-color: #000;
-  }
-}
+// const styles = `
+// @keyframes flip {
+//   0% {
+//     transform: rotateX(0deg);
+//     background-color: #000;
+//   }
+//   50% {
+//     transform: rotateX(90deg);
+//     background-color: #111;
+//   }
+//   100% {
+//     transform: rotateX(180deg);
+//     background-color: #000;
+//   }
+// }
 
-.animate-flip {
-  animation: flip 0.05s linear;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-`;
+// .animate-flip {
+//   animation: flip 0.05s linear;
+//   transform-style: preserve-3d;
+//   backface-visibility: hidden;
+// }
+// `;

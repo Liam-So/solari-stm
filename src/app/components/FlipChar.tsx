@@ -11,7 +11,7 @@ type FlipCharProps = {
 const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
   const [current, setCurrent] = useState(' ');
   const [isFlipping, setIsFlipping] = useState(false);
-  const [charIndex, setCharIndex] = useState(0);
+  const [, setCharIndex] = useState(0);
 
   useEffect(() => {
     if (current !== target) {

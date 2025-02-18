@@ -1,6 +1,5 @@
 import type React from "react"
 import { useState, useEffect } from "react"
-import { soundEffect } from "../utils/soundEffects"
 
 interface SolariFlapProps {
   char: string
@@ -13,10 +12,9 @@ const SolariFlap: React.FC<SolariFlapProps> = ({ char, isFlipping }) => {
   useEffect(() => {
     if (isFlipping) {
       const interval = setInterval(() => {
-        setDisplayChar((prev) => {
+        setDisplayChar(() => {
           const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
           const newChar = chars[Math.floor(Math.random() * chars.length)]
-          soundEffect.playFlipSound()
           return newChar
         })
       }, 50)
@@ -24,7 +22,6 @@ const SolariFlap: React.FC<SolariFlapProps> = ({ char, isFlipping }) => {
       setTimeout(() => {
         clearInterval(interval)
         setDisplayChar(char.toUpperCase())
-        soundEffect.playFlipSound(0.2)
       }, 500)
 
       return () => clearInterval(interval)
