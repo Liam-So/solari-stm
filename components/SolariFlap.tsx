@@ -13,7 +13,7 @@ const SolariFlap: React.FC<SolariFlapProps> = ({ char, isFlipping }) => {
   useEffect(() => {
     if (isFlipping) {
       const interval = setInterval(() => {
-        setDisplayChar((prev) => {
+        setDisplayChar(() => {
           const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
           const newChar = chars[Math.floor(Math.random() * chars.length)]
           soundEffect.playFlipSound()
