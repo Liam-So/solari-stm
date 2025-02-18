@@ -50,7 +50,7 @@ const SolariBoard = () => {
         <div className="text-gray-400 text-sm mb-2 flex px-2">
           <div className="w-8" />
           <div className="flex-1 pl-4">DESTINATION</div>
-          <div className="w-[280px] text-center">TIME</div>
+          <div className="text-center pr-4 md:pr-20">TIME</div>
         </div>
         {boardData.map((row, index) => (
           <FlipRow
