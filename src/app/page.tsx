@@ -34,12 +34,8 @@ const SolariBoard = () => {
   const [mode, setMode] = useState(Modes.Alphanumeric)
   const [chars, setChars] = useState(Presets.ALPHANUM)
   const [words, setWords] = useState(Words)
-  const [length, setLength] = useState(40)
-  const [timing, setTiming] = useState(30)
-  const [padChar, setPadChar] = useState(' ')
-  const [padMode, setPadMode] = useState('auto')
   const [value, setValue] = useState('hello')
-  const [hinge, setHinge] = useState(true)
+
 
   useEffect(() => {
     const updateBoard = async () => {
@@ -53,7 +49,7 @@ const SolariBoard = () => {
     updateBoard();
 
     // Update every 30 seconds
-    const interval = setInterval(updateBoard, 20000);
+    const interval = setInterval(updateBoard, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -66,26 +62,14 @@ const SolariBoard = () => {
         <div className="text-white text-lg mb-4 text-center font-mono">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}
         </div>
-        <div className="text-gray-400 text-sm mb-2 flex px-2">
-          <div className="w-8" />
-          <div className="flex-1 pl-4">DESTINATION</div>
-          <div className="text-center pr-4 md:pr-20">TIME</div>
+        <div className="text-gray-400 text-sm mb-2 flex">
+          <div className='flex w-full justify-between items-center px-2'>
+            <div>DESTINATION</div>
+            <div>TIME</div>
+          </div>
         </div>
 
-        <button className='p-1 rounded-lg text-xs bg-red-50' onClick={() => setValue("TORONTO")}>Click me</button>
-
-        <FlapDisplay 
-          value={value}
-          chars={chars}
-          words={mode === Modes.Words ? words : undefined}
-          length={length}
-          timing={timing}
-          hinge={hinge}
-          padChar={padChar}
-          padMode={padMode}
-        />
-
-        {/* {boardData.map((row, index) => (
+        {boardData.map((row, index) => (
           <FlipRow
             key={index}
             trainLine={row.line}
@@ -93,34 +77,10 @@ const SolariBoard = () => {
             time={row.time}
             onRowComplete={() => {}}
           />
-        ))} */}
+        ))}
       </div>
     </div>
   );
 };
 
 export default SolariBoard;
-
-// Add this to your global CSS or style tag
-const styles = `
-@keyframes flip {
-  0% {
-    transform: rotateX(0deg);
-    background-color: #000;
-  }
-  50% {
-    transform: rotateX(90deg);
-    background-color: #111;
-  }
-  100% {
-    transform: rotateX(180deg);
-    background-color: #000;
-  }
-}
-
-.animate-flip {
-  animation: flip 0.05s linear;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-`;
