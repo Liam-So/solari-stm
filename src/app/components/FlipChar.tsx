@@ -1,4 +1,6 @@
 "use client";
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState, useEffect } from "react";
 
 const CHARACTERS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-'.split('');
@@ -36,7 +38,7 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
   }, [target, onAnimationComplete]);
 
   return (
-    <div className={`relative min-w-[32px] w-8 h-10 bg-gray-900 overflow-hidden border border-gray-700 rounded-sm
+    <div className={`relative min-w-[32px] w-8 h-10 bg-zinc-900 overflow-hidden border border-gray-700 rounded-sm
       ${isFlipping ? 'animate-flip' : ''}`} // remove animate-flip if you want to remove
       style={{
         transformStyle: 'preserve-3d',

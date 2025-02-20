@@ -4,15 +4,6 @@ import React, { useState, useEffect } from 'react';
 import FlipRow from './components/FlipRow';
 import { fetchMTAData } from './services/mtaServices';
 
-/*
-TODO:
-1. Import the static GTFS data into a folder
-2. Create a script that will get the stop ids for grand central station in stops.txt
-3. Create a lookup table for the stops.txt. Make the key the ID and the value the destination name.
-    - Should we store it in a file somewhere?
-4. Get the last stop in tripUpdate.stopTimeUpdate. This will be our destination.
-
-*/
 type Train = {
   line: string;
   destination: string;
@@ -21,6 +12,7 @@ type Train = {
 
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState<Train[]>([]);
+
 
   useEffect(() => {
     const updateBoard = async () => {
@@ -34,7 +26,7 @@ const SolariBoard = () => {
     updateBoard();
 
     // Update every 30 seconds
-    const interval = setInterval(updateBoard, 20000);
+    const interval = setInterval(updateBoard, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -47,11 +39,13 @@ const SolariBoard = () => {
         <div className="text-white text-lg mb-4 text-center font-mono">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}
         </div>
-        <div className="text-gray-400 text-sm mb-2 flex px-2">
-          <div className="w-8" />
-          <div className="flex-1 pl-4">DESTINATION</div>
-          <div className="text-center pr-4 md:pr-20">TIME</div>
+        <div className="text-gray-400 text-sm mb-2 flex">
+          <div className='flex w-full justify-between items-center px-2'>
+            <div>DESTINATION</div>
+            <div>TIME</div>
+          </div>
         </div>
+
         {boardData.map((row, index) => (
           <FlipRow
             key={index}
@@ -67,27 +61,3 @@ const SolariBoard = () => {
 };
 
 export default SolariBoard;
-
-// Add this to your global CSS or style tag
-// const styles = `
-// @keyframes flip {
-//   0% {
-//     transform: rotateX(0deg);
-//     background-color: #000;
-//   }
-//   50% {
-//     transform: rotateX(90deg);
-//     background-color: #111;
-//   }
-//   100% {
-//     transform: rotateX(180deg);
-//     background-color: #000;
-//   }
-// }
-
-// .animate-flip {
-//   animation: flip 0.05s linear;
-//   transform-style: preserve-3d;
-//   backface-visibility: hidden;
-// }
-// `;
