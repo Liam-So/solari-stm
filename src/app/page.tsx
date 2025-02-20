@@ -2,36 +2,29 @@
 
 import React, { useState, useEffect } from 'react';
 import FlipRow from './components/FlipRow';
+import { fetchMTAData } from './services/mtaServices';
 
-// type Train = {
-//   line: string;
-//   destination: string;
-//   time: string;
-// }
+type Train = {
+  line: string;
+  destination: string;
+  time: string;
+}
 
 const SolariBoard = () => {
-  const [destination, setDestination] = useState<string>("");
-  const [time, setTime] = useState<number>(1);
-
+  const [boardData, setBoardData] = useState<Train[]>([]);
 
   useEffect(() => {
-    // const updateBoard = async () => {
-    //   const trains = await fetchMTAData();
-    //   console.log(trains);
+    const updateBoard = async () => {
+      const trains = await fetchMTAData();
       
-    //   setBoardData(trains);
-    // };
+      setBoardData(trains);
+    };
 
-    // // Initial fetch
-    // updateBoard();
-    const updateBoard = () => {
-      console.log('running');
-      setDestination("hello welcome")
-      setTime(prev => prev + 1)
-    }
+    // Initial fetch
+    updateBoard();
 
     // Update every 30 seconds
-    const interval = setInterval(updateBoard, 3000);
+    const interval = setInterval(updateBoard, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -51,14 +44,7 @@ const SolariBoard = () => {
           </div>
         </div>
 
-        <FlipRow
-            trainLine={''}
-            destination={destination}
-            time={time.toString()}
-            onRowComplete={() => {}}
-          />
-
-        {/* {boardData.map((row, index) => (
+        {boardData.map((row, index) => (
           <FlipRow
             key={index}
             trainLine={row.line}
@@ -66,7 +52,7 @@ const SolariBoard = () => {
             time={row.time}
             onRowComplete={() => {}}
           />
-        ))} */}
+        ))}
       </div>
     </div>
   );
