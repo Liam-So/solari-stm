@@ -54,6 +54,10 @@
   margin-right: 1px;
   font-size: 30px;
   line-height: 32px;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
 
   &[data-mode="words"] {
     width: 100%;
@@ -87,13 +91,14 @@
   z-index: 1;
   border-radius: inherit;
   box-sizing: border-box;
-  will-change: transform, opacity;
+  will-change: transform;
   transform: translateZ(0);
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  backface-visibility: hidden;
 
   &.animated {
     animation-duration: 200ms;
     z-index: 2;
+    animation-timing-function: linear;
   }
 
   &.top {
@@ -107,7 +112,7 @@
     &.animated.final {
       opacity: 1;
       animation-name: flapDownTop;
-      animation-timing-function: ease-in;
+      animation-timing-function: linear;
     }
   }
 
@@ -116,7 +121,7 @@
 
     &.animated.final {
       animation-name: flapDownBottom;
-      animation-timing-function: ease-out;
+      animation-timing-function: linear;
     }
   }
 }
