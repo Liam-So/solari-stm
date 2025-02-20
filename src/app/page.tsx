@@ -2,16 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import FlipRow from './components/FlipRow';
-import { fetchMTAData } from './services/mtaServices';
 
-type Train = {
-  line: string;
-  destination: string;
-  time: string;
-}
+// type Train = {
+//   line: string;
+//   destination: string;
+//   time: string;
+// }
 
 const SolariBoard = () => {
-  const [boardData, setBoardData] = useState<Train[]>([]);
   const [destination, setDestination] = useState<string>("");
   const [time, setTime] = useState<number>(1);
 
