@@ -12,21 +12,28 @@ type Train = {
 
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState<Train[]>([]);
+  const [destination, setDestination] = useState<string>("");
+  const [time, setTime] = useState<number>(1);
 
 
   useEffect(() => {
-    const updateBoard = async () => {
-      const trains = await fetchMTAData();
-      console.log(trains);
+    // const updateBoard = async () => {
+    //   const trains = await fetchMTAData();
+    //   console.log(trains);
       
-      setBoardData(trains);
-    };
+    //   setBoardData(trains);
+    // };
 
-    // Initial fetch
-    updateBoard();
+    // // Initial fetch
+    // updateBoard();
+    const updateBoard = () => {
+      console.log('running');
+      setDestination("hello welcome")
+      setTime(prev => prev + 1)
+    }
 
     // Update every 30 seconds
-    const interval = setInterval(updateBoard, 10000);
+    const interval = setInterval(updateBoard, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -46,7 +53,14 @@ const SolariBoard = () => {
           </div>
         </div>
 
-        {boardData.map((row, index) => (
+        <FlipRow
+            trainLine={''}
+            destination={destination}
+            time={time.toString()}
+            onRowComplete={() => {}}
+          />
+
+        {/* {boardData.map((row, index) => (
           <FlipRow
             key={index}
             trainLine={row.line}
@@ -54,7 +68,7 @@ const SolariBoard = () => {
             time={row.time}
             onRowComplete={() => {}}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );
