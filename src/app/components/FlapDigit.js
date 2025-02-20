@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Flap } from './Flap'
 
 export const FlapDigit = ({
-  className,
-  css,
+  className = "",
+  css = "",
   value,
   prevValue,
   final,

@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import FlipRow from './components/FlipRow';
-import FlapDisplay from './components/FlapDisplay';
-import {Presets} from './components/Presets';
 import { fetchMTAData } from './services/mtaServices';
 
 type Train = {
@@ -12,29 +10,8 @@ type Train = {
   time: string;
 }
 
-const Words = [
-  'Washington',
-  'Baltimore',
-  'Philadelphia',
-  'Newark',
-  'New York',
-  'New Haven',
-  'Providence',
-  'Boston'
-]
-
-const Modes = {
-  Numeric: 0,
-  Alphanumeric: 1,
-  Words: 2
-}
-
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState<Train[]>([]);
-  const [mode, setMode] = useState(Modes.Alphanumeric)
-  const [chars, setChars] = useState(Presets.ALPHANUM)
-  const [words, setWords] = useState(Words)
-  const [value, setValue] = useState('hello')
 
 
   useEffect(() => {
