@@ -38,7 +38,7 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
   }, [target, onAnimationComplete]);
 
   return (
-    <div className={`relative min-w-[32px] w-8 h-10 bg-zinc-900 overflow-hidden border border-gray-700 rounded-sm
+    <div className={`digit relative min-w-[30px] w-8 h-10 overflow-hidden
       ${isFlipping ? 'animate-flip' : ''}`} // remove animate-flip if you want to remove
       style={{
         transformStyle: 'preserve-3d',

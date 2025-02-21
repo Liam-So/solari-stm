@@ -54,10 +54,10 @@
   margin-right: 1px;
   font-size: 30px;
   line-height: 32px;
-  transform: translateZ(0);
+  /* transform: translateZ(0); */
   backface-visibility: hidden;
-  perspective: 1000px;
-  will-change: transform;
+  /* perspective: 1000px;
+  will-change: transform; */
 
   &[data-mode="words"] {
     width: 100%;
