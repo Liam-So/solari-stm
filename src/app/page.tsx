@@ -17,9 +17,15 @@ const SolariBoard = () => {
   useEffect(() => {
     const updateBoard = async () => {
       const trains = await fetchMTAData();
-      console.log(trains);
       
-      setBoardData(trains.slice(0, 3));
+      // Only update state if data has actually changed
+      setBoardData(prevData => {
+        const newData = trains;
+        if (JSON.stringify(prevData) === JSON.stringify(newData)) {
+          return prevData;
+        }
+        return newData;
+      });
     };
 
     // Initial fetch
@@ -46,9 +52,9 @@ const SolariBoard = () => {
           </div>
         </div>
 
-        {boardData.map((row, index) => (
+        {boardData.map((row) => (
           <FlipRow
-            key={index}
+            key={`${row.line}-${row.destination}-${row.time}`}
             trainLine={row.line}
             destination={row.destination}
             time={row.time}
