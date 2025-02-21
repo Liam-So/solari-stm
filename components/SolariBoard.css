@@ -1,0 +1,54 @@
+.solari-board {
+  font-family: "Courier New", monospace;
+  background-color: #222;
+  padding: 20px;
+  border-radius: 10px;
+  min-width: 800px;
+}
+
+.solari-title {
+  color: #ffd700;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 4px;
+}
+
+.solari-headers {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.solari-header-char {
+  width: 30px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffd700;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.solari-row {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.solari-character {
+  width: 30px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-right: 2px;
+}
+

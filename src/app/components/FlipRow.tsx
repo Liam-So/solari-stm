@@ -1,7 +1,6 @@
+import FlipChar from "./FlipChar";
 import TrainBadge from "./TrainBadge";
-import FlapDisplay from './FlapDisplay';
-import {Presets} from './Presets';
-import { useBreakpointValue } from '../hooks/useBreakpointValue';
+import { useState } from "react";
 
 type FlipRowProps = {
   destination: string;
@@ -11,9 +10,18 @@ type FlipRowProps = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowComplete = () => {} }) => {
-  const displayLength = useBreakpointValue({ base: 7, md: 20 });
-  const minLength = useBreakpointValue({ base: 2, md: 6 })
+const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowComplete }) => {
+  const [, setCompletedChars] = useState(0);
+
+  const handleCharComplete = () => {
+    setCompletedChars(prev => {
+      const newCount = prev + 1;
+      if (newCount === destination.length) {
+        onRowComplete();
+      }
+      return newCount;
+    });
+  };
 
   return (
     <div className="flex items-center gap-4 p-2 bg-black">
@@ -21,39 +29,36 @@ const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowCo
         <TrainBadge line={trainLine} />
       </div>
       <div className="flex gap-1 flex-1 overflow-x-auto no-scrollbar">
-        <FlapDisplay
-          id="destination-display"
-          className=""
-          css={{}}
-          words={[]}
-          render={undefined} 
-          value={destination}
-          chars={Presets.ALPHANUM}
-          padChar={' '}
-          padMode={'auto'}
-          hinge={true}
-          length={displayLength}
-          timing={30}
-        />
+        {destination.padEnd(23, ' ').split('').map((char, index) => (
+            <FlipChar
+              key={index}
+              target={char}
+              onAnimationComplete={handleCharComplete}
+            />
+          ))}
       </div>
 
       <div className="flex gap-1 shrink-0">
-        <FlapDisplay
-          id="time-display"
-          className=""
-          css={{}}
-          words={[]}
-          render={undefined}
-          value={time}
-          chars={Presets.ALPHANUM}
-          padChar={' '}
-          padMode={'start'}
-          hinge={true}
-          timing={30}
-          length={minLength}
-        />
+        {/* should we add a padStart for more space? */}
+        <div className="flex gap-1">
+          {time.slice(0, 2).split('').map((char, index) => (
+            <FlipChar
+              key={`time-mobile-${index}`}
+              target={char}
+              onAnimationComplete={() => {}}
+            />
+          ))}
+        </div>
+        <div className="hidden sm:flex gap-1">
+          {time.slice(2).split('').map((char, index) => (
+            <FlipChar
+              key={`time-desktop-${index}`}
+              target={char}
+              onAnimationComplete={() => {}}
+            />
+          ))}
+        </div>
       </div>
-
     </div>
   );
 };
