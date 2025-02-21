@@ -44,10 +44,8 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
         transformStyle: 'preserve-3d',
         perspective: '1000px'
       }}>
-      <div className="absolute w-full h-[1px] bg-gray-700 top-1/2 transform -translate-y-1/2" />
-      <div className="absolute w-full h-full flex items-center justify-center text-2xl font-mono text-yellow-300">
         {current}
-      </div>
+        <div className="hinge"></div>
     </div>
   );
 };
