@@ -38,16 +38,14 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
   }, [target, onAnimationComplete]);
 
   return (
-    <div className={`relative min-w-[32px] w-8 h-10 bg-zinc-900 overflow-hidden border border-gray-700 rounded-sm
+    <div className={`digit relative min-w-[30px] min-h-[30px] w-8 h-10 overflow-hidden
       ${isFlipping ? 'animate-flip' : ''}`} // remove animate-flip if you want to remove
       style={{
         transformStyle: 'preserve-3d',
         perspective: '1000px'
       }}>
-      <div className="absolute w-full h-[1px] bg-gray-700 top-1/2 transform -translate-y-1/2" />
-      <div className="absolute w-full h-full flex items-center justify-center text-2xl font-mono text-yellow-300">
         {current}
-      </div>
+        <div className="hinge"></div>
     </div>
   );
 };
