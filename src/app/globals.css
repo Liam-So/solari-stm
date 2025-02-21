@@ -80,6 +80,40 @@
   background-color: inherit;
 }
 
+.train {
+  bottom: 15%;
+  position: absolute;
+  animation: linear infinite;
+  animation-name: run;
+  animation-duration: 5s;
+}
+@keyframes run {
+  0% {
+    transform: rotateY(180deg); 
+    left: 0;
+  }
+  48% {
+    transform: rotateY(0deg); 
+  }
+  50% { 
+    left: calc(100% - 100px);
+    transform: rotateY(180deg); 
+  }
+}
+
+@keyframes trainMove {
+  0% {
+    transform: translateX(-100%) rotateY(180deg);
+  }
+  100% {
+    transform: translateX(100%) rotateY(180deg);
+  }
+}
+
+.animate-train {
+  animation: trainMove 5s linear infinite;
+}
+
 .flap {
   position: absolute;
   height: 100%;
