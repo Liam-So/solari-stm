@@ -19,7 +19,7 @@ const SolariBoard = () => {
       const trains = await fetchMTAData();
       console.log(trains);
       
-      setBoardData(trains.slice(0, 1));
+      setBoardData(trains.slice(0, 3));
     };
 
     // Initial fetch
