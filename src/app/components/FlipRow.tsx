@@ -13,7 +13,7 @@ type FlipRowProps = {
 
 // Wrap FlipRow with React.memo and add proper comparison function
 const FlipRow: React.FC<FlipRowProps> = React.memo(
-  ({ destination, time, trainLine, onRowComplete = () => {} }) => {
+  ({ destination, time, trainLine }) => {
     const displayLength = useBreakpointValue({ base: 7, md: 20 });
     const minLength = useBreakpointValue({ base: 2, md: 6 })
 
@@ -68,5 +68,7 @@ const FlipRow: React.FC<FlipRowProps> = React.memo(
     );
   }
 );
+
+FlipRow.displayName = "FlipRow";
 
 export default FlipRow;
