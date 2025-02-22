@@ -57,7 +57,7 @@ const SolariBoard = () => {
         <div className="text-gray-400 text-sm mb-2 flex">
           <div className='flex w-full justify-between items-center px-2'>
             <div>DESTINATION</div>
-            <div>TIME</div>
+            <div>STATUS</div>
           </div>
         </div>
 

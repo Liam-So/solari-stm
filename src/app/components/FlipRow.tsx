@@ -14,11 +14,11 @@ type FlipRowProps = {
 // Wrap FlipRow with React.memo and add proper comparison function
 const FlipRow: React.FC<FlipRowProps> = React.memo(
   ({ destination, time, trainLine }) => {
-    const displayLength = useBreakpointValue({ base: 7, md: 20 });
+    const displayLength = useBreakpointValue({ base: 6, md: 20 });
     const minLength = useBreakpointValue({ base: 2, md: 6 })
 
     return (
-      <div className="flex items-center gap-4 p-2 bg-black">
+      <div className="flex justify-center items-center gap-4 p-2 bg-black">
         <div className="shrink-0 w-8">
           <TrainBadge line={trainLine} />
         </div>
