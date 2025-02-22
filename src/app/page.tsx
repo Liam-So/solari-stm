@@ -42,7 +42,7 @@ const SolariBoard = () => {
         <div className="mb-4 text-white text-2xl font-bold text-center">
           GRAND CENTRAL STATION
         </div>
-        <div className="text-white text-lg mb-4 text-center font-mono">
+        <div className="text-white text-lg mb-4 text-center">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}
         </div>
 
