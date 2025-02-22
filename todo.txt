@@ -1,0 +1,10 @@
+## Features
+[] create sounds on tick
+[] create a grand central svg and move the arms (ambitious)
+[] create a train on figma that moves
+
+
+## Bugs
+[] Resizing browser triggers all animation
+[] Make mobile have an overscroll property. I think you can set the row to be a max width, even if the length is long.
+    
