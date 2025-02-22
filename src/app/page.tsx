@@ -45,6 +45,15 @@ const SolariBoard = () => {
         <div className="text-white text-lg mb-4 text-center font-mono">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}
         </div>
+
+        <div className="relative w-full h-16 overflow-hidden">
+          <div className="absolute w-full">
+            <div className="animate-train text-4xl">
+              🚂🚃🚃🚃🚃🚃
+            </div>
+          </div>
+        </div>
+
         <div className="text-gray-400 text-sm mb-2 flex">
           <div className='flex w-full justify-between items-center px-2'>
             <div>DESTINATION</div>
