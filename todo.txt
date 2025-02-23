@@ -2,6 +2,7 @@
 [] create sounds on tick
 [] create a grand central svg and move the arms (ambitious)
 [] create a train on figma that moves
+[] DONT RUN ANIMATION ON FIRST RENDER. This is because when there's too many animations running at once it lags.
 
 
 ## Bugs

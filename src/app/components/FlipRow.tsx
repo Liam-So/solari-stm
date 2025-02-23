@@ -2,20 +2,26 @@ import TrainBadge from "./TrainBadge";
 import FlapDisplay from './FlapDisplay';
 import {Presets} from './Presets';
 import { useBreakpointValue } from '../hooks/useBreakpointValue';
-import React from 'react';
+import { memo, useEffect } from 'react';
 
 type FlipRowProps = {
   destination: string;
   time: string;
   trainLine: string;
   onRowComplete: () => void;
+  playAudio: () => void;
 }
 
 // Wrap FlipRow with React.memo and add proper comparison function
-const FlipRow: React.FC<FlipRowProps> = React.memo(
-  ({ destination, time, trainLine }) => {
+const FlipRow: React.FC<FlipRowProps> = memo(
+  ({ destination, time, trainLine, playAudio }) => {
     const displayLength = useBreakpointValue({ base: 6, md: 20 });
     const minLength = useBreakpointValue({ base: 2, md: 6 })
+
+    // Add useEffect to trigger audio when props change
+    useEffect(() => {
+      playAudio();
+    }, [destination, time, trainLine, playAudio]);
 
     return (
       <div className="flex justify-center items-center gap-4 p-2 bg-black">
@@ -59,13 +65,14 @@ const FlipRow: React.FC<FlipRowProps> = React.memo(
       </div>
     );
   },
-  // Custom comparison function to determine if re-render is needed
+  // Update comparison function to trigger re-render and audio when props change
   (prevProps, nextProps) => {
-    return (
+    const shouldNotUpdate = 
       prevProps.destination === nextProps.destination &&
       prevProps.time === nextProps.time &&
-      prevProps.trainLine === nextProps.trainLine
-    );
+      prevProps.trainLine === nextProps.trainLine;
+    
+    return shouldNotUpdate;
   }
 );
 
