@@ -12,12 +12,10 @@ type FlipCharProps = {
 
 const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
   const [current, setCurrent] = useState(' ');
-  const [isFlipping, setIsFlipping] = useState(false);
   const [, setCharIndex] = useState(0);
 
   useEffect(() => {
     if (current !== target) {
-      setIsFlipping(true);
       const interval = setInterval(() => {
         setCharIndex((prev) => {
           const nextIndex = (prev + 1) % CHARACTERS.length;
@@ -26,7 +24,6 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
           
           if (nextChar === target) {
             clearInterval(interval);
-            setIsFlipping(false);
             setTimeout(() => onAnimationComplete(), 0);
             return 0;
           }
@@ -38,12 +35,7 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
   }, [target, onAnimationComplete]);
 
   return (
-    <div className={`digit relative min-w-[30px] min-h-[30px] w-8 h-10 overflow-hidden
-      ${isFlipping ? 'animate-flip' : ''}`} // remove animate-flip if you want to remove
-      style={{
-        transformStyle: 'preserve-3d',
-        perspective: '1000px'
-      }}>
+    <div className={`digit relative min-w-[30px] min-h-[30px] w-8 h-10 overflow-hidden`}>
         {current}
         <div className="hinge"></div>
     </div>
