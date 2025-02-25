@@ -1,27 +1,14 @@
 import FlipChar from "./FlipChar";
 import TrainBadge from "./TrainBadge";
-import { useState, memo } from "react";
+import { memo } from "react";
 
 type FlipRowProps = {
   destination: string;
   time: string;
   trainLine: string;
-  onRowComplete: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FlipRow: React.FC<FlipRowProps> = memo(({ destination, time, trainLine, onRowComplete }) => {
-  const [, setCompletedChars] = useState(0);
-
-  const handleCharComplete = () => {
-    setCompletedChars(prev => {
-      const newCount = prev + 1;
-      if (newCount === destination.length) {
-        onRowComplete();
-      }
-      return newCount;
-    });
-  };
+const FlipRow: React.FC<FlipRowProps> = memo(({ destination, time, trainLine }) => {
 
   return (
     <div className="flex items-center gap-4 p-2 bg-black">

@@ -96,7 +96,6 @@ const SolariBoard = () => {
               trainLine={row.line}
               destination={row.destination}
               time={row.time}
-              onRowComplete={() => {}}
             />
           ))}
         </div>
