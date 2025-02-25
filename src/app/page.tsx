@@ -16,6 +16,12 @@ type Train = {
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState<Train[]>([]);
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString('en-US', { 
+      hour12: false, 
+      timeZone: 'America/New_York' 
+    })
+  );
   const flipSound = useRef<Howl | null>(null);
 
   useEffect(() => {
@@ -34,7 +40,23 @@ const SolariBoard = () => {
       }, i * 50);
     }
   };
-  
+
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(
+        new Date().toLocaleTimeString('en-US', { 
+          hour12: false, 
+          timeZone: 'America/New_York' 
+        })
+      );
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    }
+  }, []);
+
 
   useEffect(() => {
     const updateBoard = async () => {
@@ -65,7 +87,7 @@ const SolariBoard = () => {
         <ModelViewer />
 
         <div className="text-white text-lg mb-4 text-center">
-          {new Date().toLocaleTimeString('en-US', { hour12: false })}
+          {currentTime}
         </div>
 
         <div className="flex items-center text-sm justify-center gap-1 text-white mx-auto text-center cursor-pointer pb-8" onClick={() => setAudioEnabled(!audioEnabled)}>
