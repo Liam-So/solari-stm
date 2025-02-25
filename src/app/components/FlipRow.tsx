@@ -1,6 +1,6 @@
 import FlipChar from "./FlipChar";
 import TrainBadge from "./TrainBadge";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 type FlipRowProps = {
   destination: string;
@@ -10,7 +10,7 @@ type FlipRowProps = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowComplete }) => {
+const FlipRow: React.FC<FlipRowProps> = memo(({ destination, time, trainLine, onRowComplete }) => {
   const [, setCompletedChars] = useState(0);
 
   const handleCharComplete = () => {
@@ -61,6 +61,6 @@ const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowCo
       </div>
     </div>
   );
-};
+});
 
 export default FlipRow;

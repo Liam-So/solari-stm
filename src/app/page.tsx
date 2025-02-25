@@ -1,9 +1,11 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FlipRow from './components/FlipRow';
 import { fetchMTAData } from './services/mtaServices';
 import ModelViewer from './components/Model';
+import { Play, Pause } from 'lucide-react';
+import { Howl } from 'howler';
 
 type Train = {
   line: string;
@@ -13,18 +15,45 @@ type Train = {
 
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState<Train[]>([]);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const flipSound = useRef<Howl | null>(null);
+
+  useEffect(() => {
+    flipSound.current = new Howl({
+      src: ['/flip.mp3'],
+      volume: 0.3,
+      pool: 5
+    });
+  }, []);
+
+
+  const playStaggeredFlips = () => {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        flipSound.current?.play();
+      }, i * 50);
+    }
+  };
+  
 
   useEffect(() => {
     const updateBoard = async () => {
       const trains = await fetchMTAData();
       
-      setBoardData(trains);
+      setBoardData(prevData => {
+        const isSame = JSON.stringify(prevData) === JSON.stringify(trains);
+        
+        if (!isSame && audioEnabled) {
+          playStaggeredFlips();
+        } 
+        return isSame ? prevData : trains;
+      });
     };
   
     updateBoard();
     const interval = setInterval(updateBoard, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [audioEnabled]);
 
   return (
     <div className="mx-auto bg-black">
@@ -37,6 +66,20 @@ const SolariBoard = () => {
 
         <div className="text-white text-lg mb-4 text-center">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}
+        </div>
+
+        <div className="flex items-center text-sm justify-center gap-1 text-white mx-auto text-center cursor-pointer pb-8" onClick={() => setAudioEnabled(!audioEnabled)}>
+          {audioEnabled ? (
+            <>
+              <Pause size={12} />
+              <p>Disable Sound</p>
+            </>
+            ) : (
+              <>
+                <Play size={12}/>
+                <p>Enable Sound</p>
+              </>
+            )}
         </div>
         
         <div className="text-gray-400 text-sm mb-2 flex">
