@@ -16,7 +16,9 @@ const Model = ({ objPath, mtlPath }: ModelProps) => {
   const [model, setModel] = useState<Object3D | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [percentage, setPercentage] = useState(0);
   const modelRef = useRef<Object3D | null>(null);
+
 
   useEffect(() => {
     const mtlLoader = new MTLLoader();
@@ -46,7 +48,9 @@ const Model = ({ objPath, mtlPath }: ModelProps) => {
             modelRef.current = object;
             setLoading(false);
           },
-          undefined,
+          (xhr) => {
+            setPercentage((xhr.loaded / xhr.total) * 100)
+          },
           (error) => {
             console.error('Error loading OBJ:', error);
             setError('Failed to load 3D model');
@@ -71,7 +75,7 @@ const Model = ({ objPath, mtlPath }: ModelProps) => {
   });
 
   if (error) return <DreiText position={[0, 0, 0]} color="red" fontSize={0.5}>{error}</DreiText>;
-  if (loading) return <DreiText position={[0, 0, 0]} color="white" fontSize={0.15}>Loading...</DreiText>;
+  if (loading) return <DreiText position={[0, 0, 0]} rotation={[0, Math.PI / 4, 0]} color="white" anchorX="center" anchorY={"middle"} fontSize={0.15}>{Math.round(percentage)}% loaded...</DreiText>;
   if (!model) return null;
 
   return <primitive object={model} ref={modelRef} />;

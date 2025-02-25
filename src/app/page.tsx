@@ -16,12 +16,14 @@ type Train = {
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState<Train[]>([]);
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const [loadingMTAData, setLoadingMTAData] = useState(true);
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString('en-US', { 
       hour12: false, 
       timeZone: 'America/New_York' 
     })
   );
+
   const flipSound = useRef<Howl | null>(null);
 
   useEffect(() => {
@@ -70,6 +72,7 @@ const SolariBoard = () => {
         } 
         return isSame ? prevData : trains;
       });
+      setLoadingMTAData(false);
     };
   
     updateBoard();
@@ -112,14 +115,18 @@ const SolariBoard = () => {
         </div>
 
         <div className="pb-20">
-          {boardData.map((row, index) => (
-            <FlipRow
-              key={index}
-              trainLine={row.line}
-              destination={row.destination}
-              time={row.time}
-            />
-          ))}
+          {loadingMTAData ? (
+            <p>loading...</p>
+          ) : (
+            boardData.map((row, index) => (
+              <FlipRow
+                key={index}
+                trainLine={row.line}
+                destination={row.destination}
+                time={row.time}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
