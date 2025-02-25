@@ -50,4 +50,6 @@ const FlipRow: React.FC<FlipRowProps> = memo(({ destination, time, trainLine }) 
   );
 });
 
+FlipRow.displayName = 'FlipRow';
+
 export default FlipRow;
