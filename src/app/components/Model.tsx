@@ -94,7 +94,7 @@ const ModelViewer = () => {
           />
         </Suspense>
         <OrbitControls 
-          enableZoom={true}
+          enableZoom={false}
           enablePan={true}
           enableRotate={true}
         />

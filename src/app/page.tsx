@@ -20,11 +20,8 @@ const SolariBoard = () => {
       
       setBoardData(trains);
     };
-
-    // Initial fetch
+  
     updateBoard();
-
-    // Update every 30 seconds
     const interval = setInterval(updateBoard, 10000);
     return () => clearInterval(interval);
   }, []);
@@ -37,6 +34,7 @@ const SolariBoard = () => {
         </div>
 
         <ModelViewer />
+
         <div className="text-white text-lg mb-4 text-center">
           {new Date().toLocaleTimeString('en-US', { hour12: false })}
         </div>
@@ -48,15 +46,17 @@ const SolariBoard = () => {
           </div>
         </div>
 
-        {boardData.map((row, index) => (
-          <FlipRow
-            key={index}
-            trainLine={row.line}
-            destination={row.destination}
-            time={row.time}
-            onRowComplete={() => {}}
-          />
-        ))}
+        <div className="pb-20">
+          {boardData.map((row, index) => (
+            <FlipRow
+              key={index}
+              trainLine={row.line}
+              destination={row.destination}
+              time={row.time}
+              onRowComplete={() => {}}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -33,7 +33,7 @@ const FlipRow: React.FC<FlipRowProps> = ({ destination, time, trainLine, onRowCo
             <FlipChar
               key={index}
               target={char}
-              onAnimationComplete={handleCharComplete}
+              onAnimationComplete={() => {}}
             />
           ))}
       </div>
