@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { useState, useEffect } from "react";
+import { FLIPPING_CHAR_SPEED } from "../constants/constants";
 
 const CHARACTERS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-'.split('');
 
@@ -29,7 +30,7 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
           }
           return nextIndex;
         });
-      }, 30); // adjust this to play with duration of flipping
+      }, FLIPPING_CHAR_SPEED); // adjust this to play with duration of flipping
       return () => clearInterval(interval);
     }
   }, [target, onAnimationComplete]);

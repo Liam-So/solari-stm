@@ -6,6 +6,7 @@ import { fetchMTAData } from './services/mtaServices';
 import ModelViewer from './components/Model';
 import { Play, Pause } from 'lucide-react';
 import { Howl } from 'howler';
+import { AUDIO_STAGGER_DELAY, FETCH_MTA_INTERVAL } from './constants/constants';
 
 type Train = {
   line: string;
@@ -39,7 +40,7 @@ const SolariBoard = () => {
     for (let i = 0; i < 20; i++) {
       setTimeout(() => {
         flipSound.current?.play();
-      }, i * 50);
+      }, i * AUDIO_STAGGER_DELAY);
     }
   };
 
@@ -76,7 +77,7 @@ const SolariBoard = () => {
     };
   
     updateBoard();
-    const interval = setInterval(updateBoard, 10000);
+    const interval = setInterval(updateBoard, FETCH_MTA_INTERVAL);
     return () => clearInterval(interval);
   }, [audioEnabled]);
 
