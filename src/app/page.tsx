@@ -93,6 +93,15 @@ const SolariBoard = () => {
     return () => clearInterval(interval);
   }, [audioEnabled, selectedBoard]);
 
+  const handleBoardSelection = (boardType: TrainType) => {
+    // Only clear data and set loading state if changing board types
+    if (selectedBoard !== boardType) {
+      setLoadingData(true);
+      setBoardData([]);
+      setSelectedBoard(boardType);
+    }
+  };
+
   return (
     <div className="mx-auto bg-black">
       <div className="p-6 rounded-lg shadow-xl w-full max-w-5xl h-screen mx-auto">
@@ -121,14 +130,18 @@ const SolariBoard = () => {
         </button>
 
         <div className='flex justify-around text-white mb-8'>
-          <button onClick={() => {
-            setBoardData([])
-            setSelectedBoard(TrainType.MTA);
-          }} className={`${selectedBoard === TrainType.MTR ? 'text-gray-600' : ''}`}>Subway</button>
-          <button onClick={() => {
-            setBoardData([]);
-            setSelectedBoard(TrainType.MTR);
-          }} className={`${selectedBoard === TrainType.MTA ? 'text-gray-600' : ''}`}>Metro-North Railroad</button>
+          <button 
+            onClick={() => handleBoardSelection(TrainType.MTA)} 
+            className={`${selectedBoard === TrainType.MTR ? 'text-gray-600' : ''}`}
+          >
+            Subway
+          </button>
+          <button 
+            onClick={() => handleBoardSelection(TrainType.MTR)} 
+            className={`${selectedBoard === TrainType.MTA ? 'text-gray-600' : ''}`}
+          >
+            Metro-North Railroad
+          </button>
         </div>
 
         {loadingData ? (
