@@ -57,9 +57,9 @@ def extract_mappings(feed):
     if feed == "MTA":
         gc_name_patterns.append('42 St-Grand Central')
     
+    # Convert stop_id to string when creating the grand_central_stop_ids list
     gc_stops = stops_df[stops_df['stop_name'].str.contains('|'.join(gc_name_patterns), case=False)]
-
-    mappings['grand_central_stop_ids'] = gc_stops['stop_id'].tolist()
+    mappings['grand_central_stop_ids'] = [str(stop_id) for stop_id in gc_stops['stop_id'].tolist()]
 
     output = "gtfs_mappings.json" if feed == "MTA" else "gtfsmnr_mappings.json"
 

@@ -1,14 +1,8 @@
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 import { STOPS } from '../constants/stops';
-import GTFS_MTA from "@/app/constants/gtfs_mappings.json";
-import GTFS_MTR from "@/app/constants/gtfsmnr_mappings.json";
-
-type Train = {
-  line?: string;
-  destination: string;
-  time: string;
-  remarks?: string;
-}
+import GTFS_MTA_JSON from "@/app/constants/gtfs_mappings.json";
+import GTFS_MTR_JSON from "@/app/constants/gtfsmnr_mappings.json";
+import { Train, TransitData } from '../types/train';
 
 
 const MTA_SUBWAYS_URL = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs';
@@ -18,6 +12,9 @@ const DataFeeds: Record<string, string> = {
   MTA_SUBWAYS: MTA_SUBWAYS_URL,
   MTR_RAILROADS: MTR_RAILROADS_URL
 }
+
+const GTFS_MTA = GTFS_MTA_JSON as TransitData;
+const GTFS_MTR = GTFS_MTR_JSON as TransitData;
 
 const extractMTATrainData = (feed: any) => {
   console.log('extracting mta data');
@@ -51,7 +48,7 @@ const extractMTATrainData = (feed: any) => {
         
         // the final destination is the last element in the stop time update object
         const finalDestination = stopTimeUpdates.at(-1)?.stopId || "";
-        const color = GTFS_MTA["routes"][route]["color"]
+        const color = GTFS_MTA["routes"][route]["color"];
 
         if (minutesAway > 0) {
           trains.push({
@@ -89,22 +86,17 @@ const extractMTRTrainData = (feed: any) => {
 
         const destinationStopId: string = entity.tripUpdate.stopTimeUpdate.at(-1).stopId;
         const stops = GTFS_MTR["stops"];
-        let destination = ""
-
-        if (destinationStopId in stops) {
-          destination = stops[destinationStopId as keyof typeof stops].toUpperCase()
-        }
+        const destination = stops[destinationStopId].toUpperCase()
         
         const departure = entity.tripUpdate.trip.startTime;
         const departureTime = entity.tripUpdate.stopTimeUpdate[0].departure.time;
         const now = Date.now() / 1000; // Assuming arrivalTime is in Unix timestamp (seconds)
         const minutesAway = Math.round((departureTime - now) / 60);
-        const route = entity.tripUpdate.trip.routeId;
 
+        const route = entity.tripUpdate.trip.routeId;
         const color = GTFS_MTR["routes"][route]["color"]
 
         if (minutesAway > 0 && minutesAway < 60) {
-          console.log("Time:", departure, "Destination:", destination, "Remarks:", remarks);
           trains.push({
             destination: destination,
             time: departure,
