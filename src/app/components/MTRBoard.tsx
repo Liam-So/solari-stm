@@ -1,7 +1,8 @@
+import { Train } from "../types/train";
 import MTRRow from "./MTRRow";
 
-type MTRBoardProps = {
-  boardData: any
+interface MTRBoardProps {
+  boardData: Train[];
 }
 
 const MTRBoard: React.FC<MTRBoardProps> = ({boardData}) => {
@@ -20,8 +21,8 @@ const MTRBoard: React.FC<MTRBoardProps> = ({boardData}) => {
           key={index}
           destination={row.destination}
           time={row.time}
-          remarks={row.remarks}
-          color={row.color}
+          remarks={row.remarks || ""}
+          color={row.color || ""}
         />
       ))}
     </div>

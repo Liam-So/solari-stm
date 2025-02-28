@@ -1,19 +1,13 @@
 import { memo } from "react";
 import TrainBadge from "./TrainBadge";
 import FlipChar from "./FlipChar";
+import { Train } from "../types/train";
 
-type SubwayRowProps = {
-  time: string;
-  destination: string;
-  trainLine: string;
-  color: string;
-}
-
-const SubwayRow: React.FC<SubwayRowProps> = memo(({ destination, trainLine, time, color }) => {
+const SubwayRow: React.FC<Train> = memo(({ destination, line, time, color }) => {
   return (
     <div className="flex items-center gap-4 p-2 bg-black">
       <div className="shrink-0 w-8">
-        <TrainBadge line={trainLine} color={color} />
+        <TrainBadge line={line || ""} color={color || ""} />
       </div>
 
       <div className="flex gap-1 flex-1 overflow-x-auto no-scrollbar">

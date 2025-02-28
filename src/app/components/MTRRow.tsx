@@ -1,14 +1,9 @@
+import { Train } from "../types/train";
 import FlipChar from "./FlipChar";
 import { memo } from "react";
 
-type MTRRowProps = {
-  destination: string;
-  time: string;
-  remarks: string;
-  color: string;
-}
 
-const MTRRow: React.FC<MTRRowProps> = memo(({ destination, time, remarks, color }) => {
+const MTRRow: React.FC<Train> = memo(({ destination, time, remarks, color }) => {
   return (
     <>
       <div className="flex items-center gap-4 p-2 bg-black">

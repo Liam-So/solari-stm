@@ -3,18 +3,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchMTAData } from './services/mtaServices';
 import ModelViewer from './components/Model';
-import { Play, Pause, Train } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { Howl } from 'howler';
 import { AUDIO_STAGGER_DELAY, FETCH_MTA_INTERVAL, FETCH_MTR_INTERVAL } from './constants/constants';
 import SubwayBoard from './components/SubwayBoard';
 import MTRBoard from './components/MTRBoard';
+import { Train } from './types/train';
 
-type Train = {
-  line?: string;
-  destination: string;
-  time: string;
-  remarks?: string;
-}
 
 enum TrainType {
   MTR = 'MTR',
@@ -126,8 +121,14 @@ const SolariBoard = () => {
         </button>
 
         <div className='flex justify-around text-white mb-8'>
-          <button onClick={() => setSelectedBoard(TrainType.MTA)} className={`${selectedBoard === TrainType.MTR ? 'text-gray-600' : ''}`}>Subway</button>
-          <button onClick={() => setSelectedBoard(TrainType.MTR)} className={`${selectedBoard === TrainType.MTA ? 'text-gray-600' : ''}`}>Metro-North Railroad</button>
+          <button onClick={() => {
+            setBoardData([])
+            setSelectedBoard(TrainType.MTA);
+          }} className={`${selectedBoard === TrainType.MTR ? 'text-gray-600' : ''}`}>Subway</button>
+          <button onClick={() => {
+            setBoardData([]);
+            setSelectedBoard(TrainType.MTR);
+          }} className={`${selectedBoard === TrainType.MTA ? 'text-gray-600' : ''}`}>Metro-North Railroad</button>
         </div>
 
         {loadingData ? (

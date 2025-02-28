@@ -1,7 +1,8 @@
+import { Train } from "../types/train";
 import SubwayRow from "./SubwayRow";
 
-type SubwayBoardProps = {
-  boardData: any
+interface SubwayBoardProps {
+  boardData: Train[];
 }
 
 const SubwayBoard: React.FC<SubwayBoardProps> = ({ boardData }) => {
@@ -18,10 +19,10 @@ const SubwayBoard: React.FC<SubwayBoardProps> = ({ boardData }) => {
       {boardData && boardData.map((row, index) => (
         <SubwayRow
           key={index}
-          trainLine={row.line}
+          line={row.line || ""}
           destination={row.destination}
           time={row.time}
-          color={row.color}
+          color={row.color || ""}
         />
       ))}
 

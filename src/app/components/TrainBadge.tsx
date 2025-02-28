@@ -1,4 +1,4 @@
-type TrainBadgeProps = {
+interface TrainBadgeProps {
   line: string;
   color: string;
 }
