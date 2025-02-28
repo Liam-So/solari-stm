@@ -2,15 +2,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { useState, useEffect } from "react";
+import { FLIPPING_CHAR_SPEED } from "../constants/constants";
 
 const CHARACTERS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-'.split('');
 
 type FlipCharProps = {
   target: string;
-  onAnimationComplete: () => void
+  onAnimationComplete: () => void;
+  color?: string;
 }
 
-const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
+const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete, color }) => {
   const [current, setCurrent] = useState(' ');
   const [, setCharIndex] = useState(0);
 
@@ -29,15 +31,18 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
           }
           return nextIndex;
         });
-      }, 30); // adjust this to play with duration of flipping
+      }, FLIPPING_CHAR_SPEED); // adjust this to play with duration of flipping
       return () => clearInterval(interval);
     }
   }, [target, onAnimationComplete]);
 
   return (
-    <div className={`digit relative min-w-[30px] min-h-[30px] w-8 h-10 overflow-hidden`}>
-        {current}
-        <div className="hinge"></div>
+    <div
+      className={`digit relative min-w-[30px] min-h-[30px] w-8 h-10 overflow-hidden`}
+      style={{ backgroundColor: color }}
+    >
+      {current}
+      <div className="hinge"></div>
     </div>
   );
 };
