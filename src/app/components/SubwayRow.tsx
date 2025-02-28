@@ -10,8 +10,8 @@ const SubwayRow: React.FC<Train> = memo(({ destination, line, time, color }) => 
         <TrainBadge line={line || ""} color={color || ""} />
       </div>
 
-      <div className="flex gap-1 flex-1 overflow-x-auto no-scrollbar">
-          {destination.padEnd(19, ' ').split('').map((char, index) => (
+      <div className="flex gap-1 flex-1 overflow-x-auto no-scrollbar px-1">
+          {destination.padEnd(20, ' ').split('').map((char, index) => (
               <FlipChar
                 key={index}
                 target={char}
