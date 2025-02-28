@@ -1,29 +1,38 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from 'react';
-import FlipRow from './components/FlipRow';
 import { fetchMTAData } from './services/mtaServices';
 import ModelViewer from './components/Model';
-import { Play, Pause } from 'lucide-react';
+import { Play, Pause, Train } from 'lucide-react';
 import { Howl } from 'howler';
-import { AUDIO_STAGGER_DELAY, FETCH_MTA_INTERVAL } from './constants/constants';
+import { AUDIO_STAGGER_DELAY, FETCH_MTA_INTERVAL, FETCH_MTR_INTERVAL } from './constants/constants';
+import SubwayBoard from './components/SubwayBoard';
+import MTRBoard from './components/MTRBoard';
 
 type Train = {
-  line: string;
+  line?: string;
   destination: string;
   time: string;
+  remarks?: string;
 }
+
+enum TrainType {
+  MTR = 'MTR',
+  MTA = 'MTA'
+}
+
 
 const SolariBoard = () => {
   const [boardData, setBoardData] = useState<Train[]>([]);
   const [audioEnabled, setAudioEnabled] = useState(false);
-  const [loadingMTAData, setLoadingMTAData] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString('en-US', { 
       hour12: false, 
       timeZone: 'America/New_York' 
     })
   );
+  const [selectedBoard, setSelectedBoard] = useState(TrainType.MTA);
 
   const flipSound = useRef<Howl | null>(null);
 
@@ -60,10 +69,15 @@ const SolariBoard = () => {
     }
   }, []);
 
-
   useEffect(() => {
     const updateBoard = async () => {
-      const trains = await fetchMTAData();
+      let trains;
+
+      if (selectedBoard === TrainType.MTA) {
+        trains = await fetchMTAData('MTA_SUBWAYS');
+      } else {
+        trains = await fetchMTAData('MTR_RAILROADS');
+      }
       
       setBoardData(prevData => {
         const isSame = JSON.stringify(prevData) === JSON.stringify(trains);
@@ -73,13 +87,16 @@ const SolariBoard = () => {
         } 
         return isSame ? prevData : trains;
       });
-      setLoadingMTAData(false);
+      setLoadingData(false);
     };
   
     updateBoard();
-    const interval = setInterval(updateBoard, FETCH_MTA_INTERVAL);
+
+    const fetchInterval = selectedBoard === TrainType.MTA ? FETCH_MTA_INTERVAL : FETCH_MTR_INTERVAL;
+    const interval = setInterval(updateBoard, fetchInterval);
+
     return () => clearInterval(interval);
-  }, [audioEnabled]);
+  }, [audioEnabled, selectedBoard]);
 
   return (
     <div className="mx-auto bg-black">
@@ -94,7 +111,7 @@ const SolariBoard = () => {
           {currentTime}
         </div>
 
-        <div className="flex items-center text-sm justify-center gap-1 text-white mx-auto text-center cursor-pointer pb-8" onClick={() => setAudioEnabled(!audioEnabled)}>
+        <button className="flex items-center text-sm justify-center gap-1 text-white mx-auto text-center cursor-pointer pb-8" onClick={() => setAudioEnabled(!audioEnabled)}>
           {audioEnabled ? (
             <>
               <Pause size={12} />
@@ -106,30 +123,22 @@ const SolariBoard = () => {
                 <p>Enable Sound</p>
               </>
             )}
-        </div>
-        
-        <div className="text-gray-400 text-sm mb-2 flex">
-          <div className='flex w-full justify-between items-center px-2'>
-            <div>DESTINATION</div>
-            <div>TIME</div>
-          </div>
+        </button>
+
+        <div className='flex justify-around text-white mb-8'>
+          <button onClick={() => setSelectedBoard(TrainType.MTA)} className={`${selectedBoard === TrainType.MTR ? 'text-gray-600' : ''}`}>Subway</button>
+          <button onClick={() => setSelectedBoard(TrainType.MTR)} className={`${selectedBoard === TrainType.MTA ? 'text-gray-600' : ''}`}>Metro-North Railroad</button>
         </div>
 
-        <div className="pb-20">
-          {loadingMTAData ? (
-            <p>loading...</p>
-          ) : (
-            boardData.map((row, index) => (
-              <FlipRow
-                key={index}
-                trainLine={row.line}
-                destination={row.destination}
-                time={row.time}
-              />
-            ))
-          )}
+        {loadingData ? (
+          <p className='mx-auto text-white text-center'>loading...</p>
+        ) : selectedBoard === TrainType.MTA ? (
+          <SubwayBoard boardData={boardData} />
+        ) : (
+          <MTRBoard boardData={boardData} />
+        )}
+
         </div>
-      </div>
     </div>
   );
 };

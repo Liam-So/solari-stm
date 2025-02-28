@@ -8,10 +8,11 @@ const CHARACTERS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:-'.split('');
 
 type FlipCharProps = {
   target: string;
-  onAnimationComplete: () => void
+  onAnimationComplete: () => void;
+  color?: string;
 }
 
-const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
+const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete, color }) => {
   const [current, setCurrent] = useState(' ');
   const [, setCharIndex] = useState(0);
 
@@ -36,9 +37,12 @@ const FlipChar: React.FC<FlipCharProps> = ({ target, onAnimationComplete }) => {
   }, [target, onAnimationComplete]);
 
   return (
-    <div className={`digit relative min-w-[30px] min-h-[30px] w-8 h-10 overflow-hidden`}>
-        {current}
-        <div className="hinge"></div>
+    <div
+      className={`digit relative min-w-[30px] min-h-[30px] w-8 h-10 overflow-hidden`}
+      style={{ backgroundColor: color }}
+    >
+      {current}
+      <div className="hinge"></div>
     </div>
   );
 };

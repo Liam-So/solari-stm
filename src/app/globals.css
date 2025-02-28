@@ -33,7 +33,6 @@ body {
 
 .digit {
   color: white;
-  background-color: black;
   position: relative;
   display: inline-block;
   box-sizing: content-box;
