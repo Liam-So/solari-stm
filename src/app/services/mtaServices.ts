@@ -4,135 +4,198 @@ import GTFS_MTA_JSON from "@/app/constants/gtfs_mappings.json";
 import GTFS_MTR_JSON from "@/app/constants/gtfsmnr_mappings.json";
 import { Train, TransitData } from '../types/train';
 
-
+// API endpoints
 const MTA_SUBWAYS_URL = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs';
-const MTR_RAILROADS_URL = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/mnr%2Fgtfs-mnr'
+const MTR_RAILROADS_URL = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/mnr%2Fgtfs-mnr';
 
-const DataFeeds: Record<string, string> = {
+// Map of valid track types to their API endpoints
+const DATA_FEEDS: Record<string, string> = {
   MTA_SUBWAYS: MTA_SUBWAYS_URL,
   MTR_RAILROADS: MTR_RAILROADS_URL
-}
+};
 
+// Transit data mappings
 const GTFS_MTA = GTFS_MTA_JSON as TransitData;
 const GTFS_MTR = GTFS_MTR_JSON as TransitData;
 
-const extractMTATrainData = (feed: any) => {
-  console.log('extracting mta data');
-  console.log(feed);
-  
-  
+// Grand Central stop IDs
+const GRAND_CENTRAL_LINES = ['4', '5', '6', '7', '7X', 'S', 'GS'];
+
+// Types for GTFS data structures
+interface StopTimeUpdate {
+  stopId: string;
+  arrival?: {
+    time?: number;
+    delay?: number;
+  };
+  departure?: {
+    time?: number;
+    delay?: number;
+  };
+  scheduledTrack?: string;
+  actualTrack?: string;
+}
+
+interface TripUpdate {
+  trip: {
+    tripId: string;
+    routeId: string;
+    startTime: string;
+    startDate: string;
+  };
+  stopTimeUpdate: StopTimeUpdate[];
+}
+
+interface FeedEntity {
+  id: string;
+  tripUpdate?: TripUpdate;
+}
+
+/**
+ * Extracts MTA subway data from GTFS feed entities
+ * @param entities - Array of GTFS feed entities
+ * @returns Array of formatted train objects
+ */
+const extractMTATrainData = (entities: FeedEntity[]): Train[] => {
   const trains: Train[] = [];
   const GRAND_CENTRAL_STOPS = GTFS_MTA.grand_central_stop_ids;
 
-  feed.entity.forEach((entity: any) => {
-    if (entity.tripUpdate && entity.tripUpdate.trip) {
-      const line = entity.tripUpdate.trip.routeId || "";
-      const route = entity.tripUpdate.trip.routeId;
-      
-      // Grand central only supports these lines- pull into a constant?
-      if (!['4', '5', '6', '7', '7X', 'S', 'GS'].includes(line)) return;
+  entities.forEach((entity) => {
+    if (!entity.tripUpdate?.trip) return;
+    
+    const trip = entity.tripUpdate.trip;
+    const line = trip.routeId || "";
+    const route = trip.routeId;
+    
+    // Filter for Grand Central supported lines only
+    if (!GRAND_CENTRAL_LINES.includes(line)) return;
 
-      const stopTimeUpdates = entity.tripUpdate.stopTimeUpdate;
-      if (!stopTimeUpdates || stopTimeUpdates.length === 0) return;
+    const stopTimeUpdates = entity.tripUpdate.stopTimeUpdate;
+    if (!stopTimeUpdates || stopTimeUpdates.length === 0) return;
 
-      // Find the stop update for Grand Central
-      const gcStop = stopTimeUpdates.find((update: any) =>
-        update.stopId && GRAND_CENTRAL_STOPS.includes(update.stopId)
-      );
-      
-      // WHY ARE DOING ARRIVAL HERE?????
-      if (gcStop && gcStop.arrival && gcStop.arrival.time) {
-        const arrivalTime = Number(gcStop.arrival?.time) || 0; // Ensure it's a number
-        const now = Date.now() / 1000; // Assuming arrivalTime is in Unix timestamp (seconds)
-        const minutesAway = Math.round((arrivalTime - now) / 60);
-        
-        // the final destination is the last element in the stop time update object
-        const finalDestination = stopTimeUpdates.at(-1)?.stopId || "";
-        const color = GTFS_MTA["routes"][route]["color"];
+    // Find the update for Grand Central
+    const gcStop = stopTimeUpdates.find(update => 
+      update.stopId && GRAND_CENTRAL_STOPS.includes(update.stopId)
+    );
+    
+    if (!gcStop?.arrival?.time) return;
+    
+    const arrivalTime = Number(gcStop.arrival.time) || 0;
+    const now = Math.floor(Date.now() / 1000);
+    const minutesAway = Math.round((arrivalTime - now) / 60);
+    
+    // Only process trains that haven't arrived yet
+    if (minutesAway <= 0) return;
+    
+    // Get the final destination stop ID
+    const finalDestination = stopTimeUpdates[stopTimeUpdates.length - 1]?.stopId || "";
+    if (!finalDestination || !STOPS[finalDestination]) return;
+    
+    const color = GTFS_MTA.routes[route]?.color || "000000";
 
-        if (minutesAway > 0) {
-          trains.push({
-            line,
-            destination: STOPS[finalDestination].toUpperCase(),
-            time: `${minutesAway} MIN`,
-            color: `#${color}`
-          });
-        }
-      }
-    }
+    trains.push({
+      line,
+      destination: STOPS[finalDestination].toUpperCase(),
+      time: `${minutesAway} MIN`,
+      color: `#${color}`
+    });
   });
 
   return trains;
-}
+};
 
-
-const extractMTRTrainData = (feed: any) => {
+/**
+ * Extracts Metro-North Railroad data from GTFS feed entities
+ * @param entities - Array of GTFS feed entities
+ * @returns Array of formatted train objects
+ */
+const extractMTRTrainData = (entities: FeedEntity[]): Train[] => {
   const trains: Train[] = [];
-  console.log(feed);
+  const GRAND_CENTRAL_STOP_ID = "1"; // Grand Central station ID for Metro-North
 
-  feed.entity.forEach((entity: any) => {
-    if (entity.tripUpdate && entity.tripUpdate.stopTimeUpdate && entity.tripUpdate.trip) {
-      // if first stop is grand central, then it is a departure
-      if (entity.tripUpdate.stopTimeUpdate[0].stopId === "1") {
-        const delay = entity.tripUpdate.stopTimeUpdate[0].departure.delay;
-        let remarks = ""
-        
-        if (delay === 0) {
-          remarks = "ON TIME";
-        } else {
-          const delayedMinutes = Math.floor(delay / 60);
-          remarks = `DELAYED ${delayedMinutes} MIN`;
-        }
+  entities.forEach((entity) => {
+    if (!entity.tripUpdate?.stopTimeUpdate?.length || !entity.tripUpdate.trip) return;
+    
+    const firstStop = entity.tripUpdate.stopTimeUpdate[0];
+    
+    // Only process departures from Grand Central
+    if (firstStop.stopId !== GRAND_CENTRAL_STOP_ID || !firstStop.departure?.time) return;
 
-        const destinationStopId: string = entity.tripUpdate.stopTimeUpdate.at(-1).stopId;
-        const stops = GTFS_MTR["stops"];
-        const destination = stops[destinationStopId].toUpperCase()
-        
-        const departure = entity.tripUpdate.trip.startTime;
-        const departureTime = entity.tripUpdate.stopTimeUpdate[0].departure.time;
-        const now = Date.now() / 1000; // Assuming arrivalTime is in Unix timestamp (seconds)
-        const minutesAway = Math.round((departureTime - now) / 60);
 
-        const route = entity.tripUpdate.trip.routeId;
-        const color = GTFS_MTR["routes"][route]["color"]
+    const departureTime = Number(firstStop.departure.time) || 0;
+    const delay = firstStop.departure.delay || 0;
+    const now = Math.floor(Date.now() / 1000);
+    const minutesAway = Math.round((departureTime - now) / 60);
+ 
+    // Skip trains too far in the future or already departed
+    if (minutesAway <= 0 || minutesAway >= 60) return;
+    
+    // Determine status based on delay
+    const remarks = delay === 0 
+      ? "ON TIME" 
+      : `DELAYED ${Math.floor(delay / 60)} MIN`;
 
-        if (minutesAway > 0 && minutesAway < 60) {
-          trains.push({
-            destination: destination,
-            time: departure,
-            remarks: remarks,
-            color: `#${color}`
-          })
-        }
-      }
-    }
-    return trains;
-  })
-
+    
+    // Get destination information
+    const lastStopIndex = entity.tripUpdate.stopTimeUpdate.length - 1;
+    const destinationStopId = entity.tripUpdate.stopTimeUpdate[lastStopIndex]?.stopId || "";
+    
+    if (!destinationStopId || !GTFS_MTR.stops[destinationStopId]) return; // BUG HERE
+    
+    const destination = GTFS_MTR.stops[destinationStopId].toUpperCase();
+    const route = entity.tripUpdate.trip.routeId;
+    const color = GTFS_MTR.routes[route]?.color || "000000";
+    
+    trains.push({
+      destination,
+      time: entity.tripUpdate.trip.startTime,
+      remarks,
+      color: `#${color}`
+    });
+  });
 
   return trains;
-}
+};
 
-
+/**
+ * Fetches and processes transit data from MTA GTFS feeds
+ * @param trackType - Type of track/transit system to fetch (MTA_SUBWAYS or MTR_RAILROADS)
+ * @returns Promise resolving to an array of formatted train objects
+ */
 export async function fetchMTAData(trackType: string): Promise<Train[]> {
   try {
-    if (!(trackType in DataFeeds)) {
-      throw new Error('Cannot find track type')
+    if (!(trackType in DATA_FEEDS)) {
+      throw new Error(`Invalid track type: ${trackType}`);
     }
 
-    const response = await fetch(trackType === "MTA_SUBWAYS" ? DataFeeds.MTA_SUBWAYS : DataFeeds.MTR_RAILROADS);
+    const apiUrl = DATA_FEEDS[trackType as keyof typeof DATA_FEEDS];
+    const response = await fetch(apiUrl);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+    }
+    
     const buffer = await response.arrayBuffer();
     const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(
       new Uint8Array(buffer)
     );
 
-
-    const trains: Train[] = trackType === "MTA_SUBWAYS" ? extractMTATrainData(feed) : extractMTRTrainData(feed);
-    console.log("trains", trains);
+    const feedEntities = feed.entity as unknown as FeedEntity[];
     
+    // Process data based on track type
+    const trains = trackType === "MTA_SUBWAYS" 
+      ? extractMTATrainData(feedEntities) 
+      : extractMTRTrainData(feedEntities);
     
-    // Sort by arrival time and take the first 9 trains
-    return trains.sort((a, b) => parseInt(a.time) - parseInt(b.time)).slice(0, 9);
+    // Sort and limit results
+    return trains
+      .sort((a, b) => {
+        const timeA = parseInt(a.time) || 0;
+        const timeB = parseInt(b.time) || 0;
+        return timeA - timeB;
+      })
+      .slice(0, 9);
+      
   } catch (error) {
     console.error('Error fetching MTA data:', error);
     return [];
